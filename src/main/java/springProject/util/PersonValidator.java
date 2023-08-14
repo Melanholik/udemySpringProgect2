@@ -1,17 +1,19 @@
 package springProject.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import springProject.dao.PersonDAO;
 import springProject.models.Person;
+import springProject.repositories.PersonRepository;
 
 @Component
 public class PersonValidator implements Validator {
-    private final PersonDAO personDAO;
+    private final PersonRepository personRepository;
 
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    @Autowired
+    public PersonValidator(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
 
@@ -24,7 +26,7 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if (personDAO.getByName(person.getName()).isPresent()) {
+        if (personRepository.findByName(person.getName()).isPresent()) {
             errors.rejectValue("name", "", "This name is already taken");
         }
     }

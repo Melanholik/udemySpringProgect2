@@ -16,13 +16,11 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/people")
 public class PersonController {
-    private final ObjectDAO<Person> personDao;
     private final PersonValidator personValidator;
     private final PersonService personService;
 
     @Autowired
-    public PersonController(ObjectDAO<Person> personDao, PersonValidator personValidator, PersonService personService) {
-        this.personDao = personDao;
+    public PersonController(PersonValidator personValidator, PersonService personService) {
         this.personValidator = personValidator;
         this.personService = personService;
     }
@@ -46,13 +44,13 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "/person/new";
         }
-        personDao.add(person);
+        personService.add(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}")
     private String getById(@PathVariable int id, Model model) {
-        Optional<Person> person = personDao.getById(id);
+        Optional<Person> person = personService.getById(id);
         if (person.isEmpty()) {
             model.addAttribute("id", id);
             return "/person/notFound";
@@ -64,13 +62,13 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     private String deleteById(@PathVariable int id) {
-        personDao.deleteById(id);
+        personService.deleteById(id);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     private String getByIdForEdit(@PathVariable int id, Model model) {
-        Optional<Person> person = personDao.getById(id);
+        Optional<Person> person = personService.getById(id);
         if (person.isEmpty()) {
             model.addAttribute("id", id);
             return "/person/notFound";
@@ -86,7 +84,7 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "/person/edit";
         }
-        personDao.update(person);
+        personService.update(person);
         return "redirect:/people";
     }
 }
