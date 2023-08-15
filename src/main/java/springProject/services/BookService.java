@@ -39,8 +39,20 @@ public class BookService {
     }
 
     @Transactional
-    public void update(Book book) {
-        bookRepository.save(book);
+    public void editWithoutPerson(Book book) {
+        if (book.getId() == 0) {
+            bookRepository.save(book);
+            return;
+        }
+        Optional<Book> oldBook = bookRepository.findById(book.getId());
+        if (oldBook.isPresent()) {
+            Book currentBook = oldBook.get();
+            currentBook.setAuthor(book.getAuthor());
+            currentBook.setName(book.getName());
+            currentBook.setReleaseYear(book.getReleaseYear());
+        }
+
+
     }
 
     @Transactional

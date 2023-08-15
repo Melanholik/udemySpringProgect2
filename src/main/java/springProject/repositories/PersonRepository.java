@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
-    Optional<Object> findByName(String name);
+    Optional<Person> findByName(String name);
 }

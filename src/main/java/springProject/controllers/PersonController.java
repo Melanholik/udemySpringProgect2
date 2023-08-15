@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springProject.dao.ObjectDAO;
 import springProject.models.Person;
 import springProject.services.PersonService;
 import springProject.util.PersonValidator;
@@ -80,7 +79,7 @@ public class PersonController {
     @PatchMapping("/{id}")
     private String change(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
 
-        personValidator.validate(person, bindingResult);
+        personValidator.validateWhenPersonChanged(person, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/person/edit";
         }

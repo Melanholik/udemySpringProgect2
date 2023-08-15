@@ -63,7 +63,7 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             return "/book/edit";
         }
-        bookService.update(book);
+        bookService.editWithoutPerson(book);
         return "redirect:/books";
     }
 
@@ -90,5 +90,29 @@ public class BookController {
     public String deleteById(@PathVariable int id) {
         bookService.deleteById(id);
         return "redirect:/books";
+    }
+
+    @PatchMapping("/addPerson/{id}")
+    public String addPerson(@PathVariable int id, @ModelAttribute("personId") Integer personId) {
+        Optional<Book> oldBook = bookService.getById(id);
+        if (oldBook.isPresent()) {
+            Book objOldBook = oldBook.get();
+            Optional<Person> person = personService.getById(personId);
+            if (person.isPresent()) {
+                objOldBook.setPerson(person.get());
+                bookService.add(objOldBook);
+            }
+        }
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("/deletePerson/{id}")
+    public String addPerson(@PathVariable int id) {
+        Optional<Book> oldBook = bookService.getById(id);
+        if (oldBook.isPresent()) {
+            oldBook.ifPresent(book -> book.setPerson(null));
+            bookService.add(oldBook.get());
+        }
+        return "redirect:/books/" + id;
     }
 }

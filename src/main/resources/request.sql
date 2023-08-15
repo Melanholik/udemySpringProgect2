@@ -1,5 +1,3 @@
-
-
 /*SQL PERSON*/
 DROP TABLE IF EXISTS person CASCADE;
 
@@ -29,7 +27,7 @@ CREATE TABLE IF NOT EXISTS book
     name         VARCHAR      NOT NULL,
     author       VARCHAR(100) NOT NULL,
     release_year INT          NOT NULL,
-    person_id INT REFERENCES person(id)
+    person_id    INT          REFERENCES person (id) ON DELETE SET NULL
 );
 
 SELECT *
