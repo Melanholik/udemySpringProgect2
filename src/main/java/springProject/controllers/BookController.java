@@ -11,6 +11,8 @@ import springProject.services.BookService;
 import springProject.services.PersonService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -45,6 +47,16 @@ public class BookController {
             }
         }
         return "/book/allBook";
+    }
+
+    @GetMapping("/search")
+    public String findMyStr(@RequestParam(name= "str", defaultValue = "") String neededStr, Model model){
+        if (Objects.equals(neededStr, "")) {
+            model.addAttribute("books", null);
+        } else {
+            model.addAttribute("books", bookService.getByNameStart(neededStr));
+        }
+        return "/book/search";
     }
 
     @GetMapping("/new")

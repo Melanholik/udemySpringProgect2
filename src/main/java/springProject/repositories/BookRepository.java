@@ -15,4 +15,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findAll(Pageable pageable);
 
     List<Book> findAll(Sort sort);
+
+    List<Book> findByNameStartingWith(String neededStr);
 }
