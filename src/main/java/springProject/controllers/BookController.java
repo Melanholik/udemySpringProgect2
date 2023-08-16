@@ -27,8 +27,23 @@ public class BookController {
     }
 
     @GetMapping()
-    public String all(Model model) {
-        model.addAttribute("books", bookService.getAll());
+    public String all(@RequestParam(name = "page", defaultValue = "0") int page,
+                      @RequestParam(name = "books_per_page", defaultValue = "0") int booksPerPage,
+                      @RequestParam(name = "sort_by_year", defaultValue = "false") boolean isNeedSortByYear,
+                      Model model) {
+        if (booksPerPage == 0) {
+            if (isNeedSortByYear) {
+                model.addAttribute("books", bookService.getSortedAll());
+            } else {
+                model.addAttribute("books", bookService.getPage());
+            }
+        } else {
+            if (isNeedSortByYear) {
+                model.addAttribute("books", bookService.getSortedPage(page, booksPerPage));
+            } else {
+                model.addAttribute("books", bookService.getPage(page, booksPerPage));
+            }
+        }
         return "/book/allBook";
     }
 

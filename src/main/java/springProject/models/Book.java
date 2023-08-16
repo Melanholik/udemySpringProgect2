@@ -31,6 +31,17 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 
+
+    public Book() {
+    }
+
+    public Book(int id, String name, String author, int releaseYear) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.releaseYear = releaseYear;
+    }
+
     public int getId() {
         return id;
     }

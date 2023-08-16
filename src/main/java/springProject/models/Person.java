@@ -27,6 +27,15 @@ public class Person {
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private List<Book> list;
 
+    public Person() {
+    }
+
+    public Person(int id, String name, int birthdayYear) {
+        this.id = id;
+        this.name = name;
+        this.birthdayYear = birthdayYear;
+    }
+
     public int getId() {
         return id;
     }

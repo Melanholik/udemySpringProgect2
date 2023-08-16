@@ -2,6 +2,8 @@ package springProject.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springProject.models.Book;
@@ -20,8 +22,16 @@ public class BookService {
         this.bookRepository = repository;
     }
 
-    public List<Book> getAll() {
+    public List<Book> getPage() {
         return bookRepository.findAll();
+    }
+
+    public List<Book> getPage(int page, int booksPerPage) {
+        return bookRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+    }
+
+    public List<Book> getSortedPage(int page, int booksPerPage) {
+        return bookRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("releaseYear"))).getContent();
     }
 
     @Transactional
@@ -58,5 +68,9 @@ public class BookService {
     @Transactional
     public void deleteById(int id) {
         bookRepository.deleteById(id);
+    }
+
+    public List<Book> getSortedAll() {
+        return bookRepository.findAll(Sort.by("releaseYear"));
     }
 }
