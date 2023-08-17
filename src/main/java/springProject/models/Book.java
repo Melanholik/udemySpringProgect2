@@ -1,9 +1,12 @@
 package springProject.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
@@ -30,6 +33,11 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
+
+    @Column(name = "take_time")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date takeTame;
 
 
     public Book() {
@@ -80,5 +88,13 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Date getTakeTame() {
+        return takeTame;
+    }
+
+    public void setTakeTame(Date takeTame) {
+        this.takeTame = takeTame;
     }
 }

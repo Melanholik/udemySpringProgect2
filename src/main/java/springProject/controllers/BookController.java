@@ -11,7 +11,7 @@ import springProject.services.BookService;
 import springProject.services.PersonService;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,7 +50,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public String findMyStr(@RequestParam(name= "str", defaultValue = "") String neededStr, Model model){
+    public String findMyStr(@RequestParam(name = "str", defaultValue = "") String neededStr, Model model) {
         if (Objects.equals(neededStr, "")) {
             model.addAttribute("books", null);
         } else {
@@ -127,6 +127,7 @@ public class BookController {
             Optional<Person> person = personService.getById(personId);
             if (person.isPresent()) {
                 objOldBook.setPerson(person.get());
+                objOldBook.setTakeTame(new Date());
                 bookService.add(objOldBook);
             }
         }

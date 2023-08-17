@@ -13,8 +13,14 @@
 <form th:if="${books.size() > 0}">
     <label><strong>КНИГИ:</strong></label>
     <div th:each="book:${books}">
-        <a th:href="@{'/books/' + ${book.getId()}}"
-           th:text="${book.getName()} +', ' + ${book.getAuthor()} + ', ' + ${book.getReleaseYear()}">Book</a>
+        <form th:if="${book.isOverdue()}">
+            <a style="color:red" th:href="@{'/books/' + ${book.getId()}}"
+               th:text="${book.getName()} +', ' + ${book.getAuthor()} + ', ' + ${book.getReleaseYear()}">Book</a>
+        </form>
+        <form th:if="${book.isOverdue() == false}">
+            <a style="color:black" th:href="@{'/books/' + ${book.getId()}}"
+               th:text="${book.getName()} +', ' + ${book.getAuthor()} + ', ' + ${book.getReleaseYear()}">Book</a>
+        </form>
     </div>
 </form>
 <form th:if="${books.size() == 0}">

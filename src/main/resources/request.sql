@@ -27,15 +27,16 @@ CREATE TABLE IF NOT EXISTS book
     name         VARCHAR      NOT NULL,
     author       VARCHAR(100) NOT NULL,
     release_year INT          NOT NULL,
-    person_id    INT          REFERENCES person (id) ON DELETE SET NULL
+    person_id    INT          REFERENCES person (id) ON DELETE SET NULL,
+    take_time DATE
 );
 
 SELECT *
 FROM book;
 
-INSERT INTO book (name, author, release_year, person_id)
-VALUES ('1984', 'Джордж Оруэлл', '1949', 1),
-       ('Гарри Поттер и философский камень', 'Джоан Роулинг', '1997', 2),
-       ('Великий Гэтсби', 'Фицджеральд, Фрэнсис Скотт', '1925', 1),
-       ('Убить пересмешника', 'Харпер Ли', '1960', null),
-       ('Властелин колец: Братство кольца', 'Дж. Р. Толкин', '1954', 1);
+INSERT INTO book (name, author, release_year, person_id, take_time)
+VALUES ('1984', 'Джордж Оруэлл', '1949', 1, '16.08.2023'),
+       ('Гарри Поттер и философский камень', 'Джоан Роулинг', '1997', 2, '15.08.2023'),
+       ('Великий Гэтсби', 'Фицджеральд, Фрэнсис Скотт', '1925', 1, '03.08.2023'),
+       ('Убить пересмешника', 'Харпер Ли', '1960', null, null),
+       ('Властелин колец: Братство кольца', 'Дж. Р. Толкин', '1954', 1, '17.08.2023');
