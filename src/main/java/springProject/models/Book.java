@@ -39,6 +39,8 @@ public class Book {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date takeTame;
 
+    @Transient
+    private boolean isOverdue;
 
     public Book() {
     }
@@ -96,5 +98,13 @@ public class Book {
 
     public void setTakeTame(Date takeTame) {
         this.takeTame = takeTame;
+    }
+
+    public boolean isOverdue() {
+        return isOverdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        isOverdue = overdue;
     }
 }

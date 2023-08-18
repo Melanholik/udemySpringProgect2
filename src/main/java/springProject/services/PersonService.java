@@ -1,12 +1,13 @@
 package springProject.services;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springProject.models.Book;
 import springProject.models.Person;
 import springProject.repositories.PersonRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,17 +35,36 @@ public class PersonService {
         if (person.isEmpty()) {
             return person;
         }
-        Hibernate.initialize(person.get().getList());
+        changInListBookIsOverdue(person.get().getList());
         return personRepository.findById(id);
     }
 
     @Transactional
     public void deleteById(int id) {
+        Optional<Person> person = personRepository.findById(id);
+        person.ifPresent(value -> deleteAllBooks(value.getList()));
         personRepository.deleteById(id);
     }
 
     @Transactional
     public void update(Person person) {
         personRepository.save(person);
+    }
+
+    private void changInListBookIsOverdue(List<Book> books) {
+        Date currentDate = new Date();
+        long currentMilliseconds = currentDate.getTime();
+        for (Book book : books) {
+            long differenceInMilliseconds = currentMilliseconds - book.getTakeTame().getTime();
+            long differenceInDays = differenceInMilliseconds / 86400000;
+            book.setOverdue(differenceInDays > 10);
+        }
+    }
+
+    private void deleteAllBooks(List<Book> books) {
+        for (Book book : books) {
+            book.setPerson(null);
+            book.setTakeTame(null);
+        }
     }
 }

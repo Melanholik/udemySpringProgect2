@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springProject.models.Book;
+import springProject.models.BookOrderBy;
 import springProject.models.Person;
 import springProject.services.BookService;
 import springProject.services.PersonService;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -23,6 +23,7 @@ public class BookController {
     private final PersonService personService;
 
     @Autowired
+
     public BookController(BookService bookService, PersonService personService) {
         this.bookService = bookService;
         this.personService = personService;
@@ -35,15 +36,15 @@ public class BookController {
                       Model model) {
         if (booksPerPage == 0) {
             if (isNeedSortByYear) {
-                model.addAttribute("books", bookService.getSortedAll());
+                model.addAttribute("books", bookService.getAll(BookOrderBy.RELEASE_YEAR));
             } else {
-                model.addAttribute("books", bookService.getPage());
+                model.addAttribute("books", bookService.getAll(BookOrderBy.NOT_SORT));
             }
         } else {
             if (isNeedSortByYear) {
-                model.addAttribute("books", bookService.getSortedPage(page, booksPerPage));
+                model.addAttribute("books", bookService.getAll(page, booksPerPage, BookOrderBy.NOT_SORT));
             } else {
-                model.addAttribute("books", bookService.getPage(page, booksPerPage));
+                model.addAttribute("books", bookService.getAll(page, booksPerPage, BookOrderBy.RELEASE_YEAR));
             }
         }
         return "/book/allBook";
@@ -121,26 +122,13 @@ public class BookController {
 
     @PatchMapping("/addPerson/{id}")
     public String addPerson(@PathVariable int id, @ModelAttribute("personId") Integer personId) {
-        Optional<Book> oldBook = bookService.getById(id);
-        if (oldBook.isPresent()) {
-            Book objOldBook = oldBook.get();
-            Optional<Person> person = personService.getById(personId);
-            if (person.isPresent()) {
-                objOldBook.setPerson(person.get());
-                objOldBook.setTakeTame(new Date());
-                bookService.add(objOldBook);
-            }
-        }
+        bookService.addPerson(id, personId);
         return "redirect:/books/" + id;
     }
 
     @PatchMapping("/deletePerson/{id}")
-    public String addPerson(@PathVariable int id) {
-        Optional<Book> oldBook = bookService.getById(id);
-        if (oldBook.isPresent()) {
-            oldBook.ifPresent(book -> book.setPerson(null));
-            bookService.add(oldBook.get());
-        }
+    public String deletePerson(@PathVariable int id) {
+        bookService.deletePerson(id);
         return "redirect:/books/" + id;
     }
 }

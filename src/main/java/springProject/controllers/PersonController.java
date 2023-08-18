@@ -5,14 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import springProject.DTO.ResponseBookDAO;
 import springProject.models.Person;
 import springProject.services.PersonService;
 import springProject.util.PersonValidator;
 
 import javax.validation.Valid;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/people")
@@ -57,9 +55,7 @@ public class PersonController {
             return "/person/notFound";
         }
         model.addAttribute("person", person.get());
-        model.addAttribute("books", person.get().getList().stream()
-                .map(ResponseBookDAO::convertBookToResponseBookDAO)
-                .collect(Collectors.toList()));
+        model.addAttribute("books", person.get().getList());
         return "/person/person";
     }
 
